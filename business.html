@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사업자 대시보드 — 티원클린</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="티원클린 홈">
+        <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="logo-img">
+      </a>
+      <nav class="nav">
+        <a href="business.html" class="active">사업자 대시보드</a>
+        <span class="user-chip" id="user-chip"></span>
+        <button class="btn btn-ghost btn-sm" id="logout-btn">로그아웃</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>사업자 대시보드</h1>
+      <p>대기중인 오더를 확인하고 수락하세요. 본인 오더의 진행 상태를 관리할 수 있습니다.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card accent">
+        <div class="stat-label">대기 풀 (수락 가능)</div>
+        <div class="stat-value" id="stat-pool">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">내가 수락 / 진행중</div>
+        <div class="stat-value" id="stat-mine-active">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">내 완료</div>
+        <div class="stat-value" id="stat-mine-done">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">내 매출 (정산액)</div>
+        <div class="stat-value" id="stat-mine-payout" style="font-size:20px;">0원</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">납부 수수료 누계</div>
+        <div class="stat-value" id="stat-mine-commission" style="font-size:20px;">0원</div>
+      </div>
+    </div>
+
+    <div class="filter-tabs" style="margin-bottom:18px;">
+      <button class="filter-tab active" data-tab="pool">대기 풀</button>
+      <button class="filter-tab" data-tab="mine">내 오더</button>
+    </div>
+
+    <div id="order-list" class="order-list"></div>
+  </main>
+
+  <!-- 작업 보고서 업로드 모달 -->
+  <div class="modal-backdrop" id="report-modal">
+    <div class="modal" style="text-align:left; max-width:640px;">
+      <h3 style="text-align:center;">작업 보고서 작성</h3>
+      <p style="text-align:center;" id="report-target"></p>
+
+      <div class="report-sides">
+        <section class="report-side report-side-before">
+          <div class="report-side-header">
+            <span class="report-side-tag">BEFORE</span>
+            <span class="report-side-title">작업 전 사진</span>
+            <span class="req-mark">*</span>
+            <span class="report-side-hint">최대 4장 · 1장 이상 필수</span>
+          </div>
+          <div class="slot-grid" data-side="before"></div>
+        </section>
+        <section class="report-side report-side-after">
+          <div class="report-side-header">
+            <span class="report-side-tag report-side-tag-after">AFTER</span>
+            <span class="report-side-title">작업 후 사진</span>
+            <span class="req-mark">*</span>
+            <span class="report-side-hint">최대 4장 · 1장 이상 필수</span>
+          </div>
+          <div class="slot-grid" data-side="after"></div>
+        </section>
+      </div>
+
+      <div class="form-group">
+        <label for="report-desc">작업 설명 (선택)</label>
+        <textarea id="report-desc" maxlength="1000" placeholder="작업 내용, 특이사항 등을 적어주세요. 고객이 보게 됩니다."></textarea>
+      </div>
+
+      <div class="modal-actions" style="justify-content:flex-end;">
+        <button class="btn btn-ghost" id="report-cancel">취소</button>
+        <button class="btn btn-primary" id="report-submit">완료 처리</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div>© 2026 티원클린(T-ONE CLEAN)</div>
+  </footer>
+
+  <script type="module" src="js/business.js"></script>
+</body>
+</html>

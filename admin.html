@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 페이지 — 티원클린</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="티원클린 홈">
+        <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="logo-img">
+      </a>
+      <nav class="nav">
+        <a href="admin.html" class="active">관리자</a>
+        <span class="user-chip" id="user-chip"></span>
+        <button class="btn btn-ghost btn-sm" id="logout-btn">로그아웃</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>관리자 대시보드</h1>
+      <p>전체 오더 현황과 사업자별 실적, 매출/수수료를 실시간으로 확인하세요.</p>
+    </div>
+
+    <!-- KPI -->
+    <div class="stats">
+      <div class="stat-card accent">
+        <div class="stat-label">총 오더</div>
+        <div class="stat-value" id="kpi-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">대기중</div>
+        <div class="stat-value" id="kpi-pending">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">진행중</div>
+        <div class="stat-value" id="kpi-progress">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">완료</div>
+        <div class="stat-value" id="kpi-done">0</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-label">누적 수수료 수입</div>
+        <div class="stat-value" id="kpi-commission" style="font-size:22px;">0원</div>
+      </div>
+    </div>
+
+    <!-- 탭 -->
+    <div class="filter-tabs" style="margin-bottom:20px;">
+      <button class="filter-tab active" data-tab="businesses">사업자 관리</button>
+      <button class="filter-tab" data-tab="orders">전체 오더</button>
+      <button class="filter-tab" data-tab="stats">사업자별 실적</button>
+      <button class="filter-tab" data-tab="revenue">매출 분석</button>
+    </div>
+
+    <!-- 사업자 관리 -->
+    <section class="tab-panel" data-panel="businesses">
+      <div class="card" style="padding:0; overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>업체명</th>
+              <th>대표자</th>
+              <th>사업자/법인번호</th>
+              <th>이메일</th>
+              <th>연락처</th>
+              <th>가입일</th>
+              <th>상태</th>
+              <th style="text-align:right;">관리</th>
+            </tr>
+          </thead>
+          <tbody id="business-list"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 전체 오더 -->
+    <section class="tab-panel hidden" data-panel="orders">
+      <div class="card" style="padding:0; overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>주문번호</th>
+              <th>고객</th>
+              <th>주소</th>
+              <th>품목</th>
+              <th>방문일</th>
+              <th>금액</th>
+              <th>수수료</th>
+              <th>담당 사업자</th>
+              <th>상태</th>
+              <th>보고서</th>
+              <th>접수일시</th>
+            </tr>
+          </thead>
+          <tbody id="order-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 사업자별 실적 -->
+    <section class="tab-panel hidden" data-panel="stats">
+      <div class="card" style="padding:0; overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>사업자</th>
+              <th>수락</th>
+              <th>진행중</th>
+              <th>완료</th>
+              <th>총 매출 (고객 결제)</th>
+              <th>수수료 (관리자 수입)</th>
+              <th>사업자 정산액</th>
+            </tr>
+          </thead>
+          <tbody id="business-stats"></tbody>
+          <tfoot>
+            <tr id="business-stats-total"></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- 매출 분석 -->
+    <section class="tab-panel hidden" data-panel="revenue">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-bottom:20px;">
+        <div class="stat-card accent">
+          <div class="stat-label">완료 오더 총 매출</div>
+          <div class="stat-value" id="rev-total" style="font-size:22px;">0원</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">완료 오더 수</div>
+          <div class="stat-value" id="rev-count">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">수수료 합계 (관리자 수입)</div>
+          <div class="stat-value" id="rev-commission" style="font-size:22px;">0원</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">사업자 정산 합계</div>
+          <div class="stat-value" id="rev-payout" style="font-size:22px;">0원</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 16px;">최근 14일 일별 매출 / 수수료</h3>
+        <div class="bar-chart" id="rev-chart"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 작업 보고서 업로드/조회 모달 -->
+  <div class="modal-backdrop" id="report-modal">
+    <div class="modal" style="text-align:left; max-width:640px;">
+      <h3 style="text-align:center;">작업 보고서</h3>
+      <p style="text-align:center;" id="report-target"></p>
+
+      <div class="report-sides">
+        <section class="report-side report-side-before">
+          <div class="report-side-header">
+            <span class="report-side-tag">BEFORE</span>
+            <span class="report-side-title">작업 전 사진</span>
+            <span class="req-mark">*</span>
+            <span class="report-side-hint">최대 4장</span>
+          </div>
+          <div class="slot-grid" data-side="before"></div>
+        </section>
+        <section class="report-side report-side-after">
+          <div class="report-side-header">
+            <span class="report-side-tag report-side-tag-after">AFTER</span>
+            <span class="report-side-title">작업 후 사진</span>
+            <span class="req-mark">*</span>
+            <span class="report-side-hint">최대 4장</span>
+          </div>
+          <div class="slot-grid" data-side="after"></div>
+        </section>
+      </div>
+
+      <div class="form-group">
+        <label for="report-desc">작업 설명 (선택)</label>
+        <textarea id="report-desc" maxlength="1000" placeholder="작업 내용, 특이사항 등."></textarea>
+      </div>
+
+      <div class="modal-actions" style="justify-content:flex-end;">
+        <button class="btn btn-ghost" id="report-cancel">취소</button>
+        <button class="btn btn-primary" id="report-submit">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div>© 2026 티원클린(T-ONE CLEAN)</div>
+  </footer>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function userData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function isAdmin() {
+      return isSignedIn() && userData().role == 'admin';
+    }
+    function isActiveBusiness() {
+      return isSignedIn()
+        && userData().role == 'business'
+        && userData().status == 'active';
+    }
+
+    match /users/{uid} {
+      // 본인은 자기 문서 조회 가능, 관리자는 전체 조회 가능
+      allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+
+      // 가입: 본인 UID 문서를 'business' / 'pending' 으로만 생성 가능
+      allow create: if isSignedIn()
+        && request.auth.uid == uid
+        && request.resource.data.role == 'business'
+        && request.resource.data.status == 'pending';
+
+      // 상태/정보 수정은 관리자만 (사업자 본인이 자기 role/status를 바꿀 수 없음)
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      // 고객 주문 조회: 누구나 가능 (전화번호로 조회 기능 유지)
+      allow read: if true;
+
+      // 고객 주문 신청: 비로그인도 가능, 단 status는 '대기'로만 생성
+      allow create: if request.resource.data.status == '대기'
+        && request.resource.data.acceptedBy == null;
+
+      // 비로그인 고객의 리뷰 작성: 완료 + 작업보고서 등록됨 + 아직 리뷰 없음 + review 필드만 변경
+      function isReviewOnlyUpdate() {
+        return request.resource.data.diff(resource.data).affectedKeys()
+                .hasOnly(['review', 'reviewedAt'])
+            && resource.data.status == '완료'
+            && 'workReport' in resource.data
+            && !('review' in resource.data);
+      }
+
+      // 수정: 관리자 / 활성 사업자 / 고객 리뷰 한정 업데이트
+      allow update: if isAdmin()
+                    || isActiveBusiness()
+                    || isReviewOnlyUpdate();
+      allow delete: if isAdmin();
+    }
+
+    // 작업 히스토리 게시물 (자유 작성, 사업자/관리자만 작성 가능)
+    match /workPosts/{postId} {
+      allow read: if true;
+      allow create: if isSignedIn()
+        && (isAdmin() || isActiveBusiness())
+        && request.resource.data.authorUid == request.auth.uid;
+      allow update: if isSignedIn()
+        && (isAdmin()
+            || (isActiveBusiness() && resource.data.authorUid == request.auth.uid));
+      allow delete: if isSignedIn()
+        && (isAdmin()
+            || (isActiveBusiness() && resource.data.authorUid == request.auth.uid));
+    }
+  }
+}

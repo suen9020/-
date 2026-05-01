@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>작업 히스토리 / 고객 리뷰 — 티원클린</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="티원클린 홈">
+        <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="logo-img">
+      </a>
+      <nav class="nav">
+        <a href="index.html">홈</a>
+        <a href="order.html">청소 신청</a>
+        <a href="my-orders.html">주문 조회</a>
+        <a href="history.html" class="active">작업 히스토리</a>
+        <a href="login.html">사업자 로그인</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>작업 히스토리 / 고객 리뷰</h1>
+      <p>티원클린이 함께한 모든 작업과 고객님들의 후기를 확인하세요.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card accent">
+        <div class="stat-label">누적 완료 작업</div>
+        <div class="stat-value" id="hist-done">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">총 리뷰 수</div>
+        <div class="stat-value" id="hist-reviews">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">평균 별점</div>
+        <div class="stat-value" id="hist-rating" style="font-size:24px;">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">에어컨 청소 누적</div>
+        <div class="stat-value" id="hist-units">0대</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-tab="all">전체</button>
+        <button class="filter-tab" data-tab="orders">주문 작업</button>
+        <button class="filter-tab" data-tab="posts">게시물</button>
+        <button class="filter-tab" data-tab="reviewed">리뷰 있음</button>
+      </div>
+      <button class="btn btn-primary btn-sm hidden" id="post-create-btn">＋ 작업 히스토리 작성</button>
+    </div>
+
+    <div id="history-list" class="order-list"></div>
+  </main>
+
+  <!-- 작업 게시물 작성/수정 모달 -->
+  <div class="modal-backdrop" id="post-modal">
+    <div class="modal" style="text-align:left; max-width:680px;">
+      <h3 style="text-align:center;" id="post-modal-title">작업 히스토리 작성</h3>
+
+      <div class="form-row" style="margin-top:14px;">
+        <div class="form-group">
+          <label for="post-title">제목<span class="req">*</span></label>
+          <input type="text" id="post-title" maxlength="100" placeholder="예: 강남구 ○○빌라 벽걸이 2대 분해세척">
+        </div>
+        <div class="form-group">
+          <label for="post-actype">에어컨 종류<span class="req">*</span></label>
+          <select id="post-actype">
+            <option value="">선택하세요</option>
+            <option>벽걸이형</option>
+            <option>스탠드형</option>
+            <option>천장형(시스템)</option>
+            <option>창문형</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="report-sides">
+        <section class="report-side report-side-before">
+          <div class="report-side-header">
+            <span class="report-side-tag">BEFORE</span>
+            <span class="report-side-title">작업 전 사진</span>
+            <span class="req-mark">*</span>
+            <span class="report-side-hint">최대 4장 · 1장 이상</span>
+          </div>
+          <div class="slot-grid" data-side="before"></div>
+        </section>
+        <section class="report-side report-side-after">
+          <div class="report-side-header">
+            <span class="report-side-tag report-side-tag-after">AFTER</span>
+            <span class="report-side-title">작업 후 사진</span>
+            <span class="req-mark">*</span>
+            <span class="report-side-hint">최대 4장 · 1장 이상</span>
+          </div>
+          <div class="slot-grid" data-side="after"></div>
+        </section>
+      </div>
+
+      <div class="form-group" style="margin-top:8px;">
+        <label for="post-desc">작업 설명</label>
+        <textarea id="post-desc" maxlength="1000" placeholder="어떤 작업을 했는지, 특이사항이나 팁 등을 자유롭게 작성하세요."></textarea>
+      </div>
+
+      <div class="modal-actions" style="justify-content:space-between;">
+        <button class="btn btn-danger btn-sm hidden" id="post-delete">삭제</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-ghost" id="post-cancel">취소</button>
+          <button class="btn btn-primary" id="post-submit">등록</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div>© 2026 티원클린(T-ONE CLEAN)</div>
+  </footer>
+
+  <script type="module" src="js/history.js"></script>
+</body>
+</html>

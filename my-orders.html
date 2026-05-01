@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 주문 조회 — 티원클린</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="티원클린 홈">
+        <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="logo-img">
+      </a>
+      <nav class="nav">
+        <a href="index.html">홈</a>
+        <a href="order.html">청소 신청</a>
+        <a href="my-orders.html" class="active">주문 조회</a>
+        <a href="history.html">작업 히스토리</a>
+        <a href="login.html">사업자 로그인</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>내 주문 조회</h1>
+      <p>신청 시 입력한 연락처로 주문 진행 상태를 확인하세요.</p>
+    </div>
+
+    <div style="background:#fff; padding:20px; border-radius:var(--radius); border:1px solid var(--border); margin-bottom:24px;">
+      <form id="search-form" style="display:flex; gap:10px; flex-wrap:wrap;">
+        <input type="tel" id="phone" placeholder="010-1234-5678" required
+          style="flex:1; min-width:220px; padding:11px 14px; border:1px solid var(--border); border-radius:8px; font-size:16px; font-family:inherit;">
+        <button type="submit" class="btn btn-primary">조회</button>
+      </form>
+    </div>
+
+    <div id="result-list" class="order-list"></div>
+  </main>
+
+  <!-- 리뷰 작성 모달 -->
+  <div class="modal-backdrop" id="review-modal">
+    <div class="modal" style="text-align:left;">
+      <h3 style="text-align:center;">리뷰 작성</h3>
+      <p style="text-align:center;" id="review-target"></p>
+
+      <div class="form-group" style="margin-top:20px;">
+        <label>별점<span class="req">*</span></label>
+        <div class="star-input" id="star-input">
+          <button type="button" class="star" data-v="1">★</button>
+          <button type="button" class="star" data-v="2">★</button>
+          <button type="button" class="star" data-v="3">★</button>
+          <button type="button" class="star" data-v="4">★</button>
+          <button type="button" class="star" data-v="5">★</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="review-comment">한줄평 (선택)</label>
+        <textarea id="review-comment" maxlength="500" placeholder="작업이 어떠셨나요?"></textarea>
+      </div>
+
+      <div class="modal-actions" style="justify-content:flex-end;">
+        <button class="btn btn-ghost" id="review-cancel">취소</button>
+        <button class="btn btn-primary" id="review-submit">등록</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div>© 2026 티원클린(T-ONE CLEAN)</div>
+  </footer>
+
+  <script type="module" src="js/my-orders.js"></script>
+</body>
+</html>

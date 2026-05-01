@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>티원클린 (T-ONE CLEAN) — 에어컨 청소 매칭 플랫폼</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="티원클린 홈">
+        <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="logo-img">
+      </a>
+      <nav class="nav">
+        <a href="index.html" class="active">홈</a>
+        <a href="order.html">청소 신청</a>
+        <a href="my-orders.html">주문 조회</a>
+        <a href="history.html">작업 히스토리</a>
+        <a href="login.html">사업자 로그인</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="hero-logo">
+      <h1>전문가의 손길로 <span class="accent">쾌적한 에어컨</span></h1>
+      <p>몇 번의 클릭으로 청소 신청. 검증된 사업자가 빠르게 매칭됩니다.</p>
+      <div class="hero-cta">
+        <a href="order.html" class="btn btn-primary">청소 신청하기</a>
+        <a href="login.html" class="btn btn-outline">사업자 로그인</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 애니메이션 통계 (클릭 시 작업 히스토리로 이동) -->
+  <section class="section stats-hero" id="stats-hero">
+    <div class="container">
+      <h2 class="section-title">티원클린이 함께한 시간</h2>
+      <p class="section-sub">실시간으로 업데이트되는 누적 실적과 고객 후기 — 카드를 클릭하면 자세한 작업 히스토리를 볼 수 있어요.</p>
+      <a href="history.html" class="counter-grid" id="counter-grid" aria-label="작업 히스토리 / 리뷰 페이지로 이동">
+        <div class="counter-card">
+          <div class="counter-icon">✅</div>
+          <div class="counter-value" data-counter="done" data-target="0">0</div>
+          <div class="counter-label">누적 완료 작업</div>
+        </div>
+        <div class="counter-card">
+          <div class="counter-icon">🌟</div>
+          <div class="counter-value" data-counter="reviews" data-target="0">0</div>
+          <div class="counter-label">고객 리뷰</div>
+        </div>
+        <div class="counter-card">
+          <div class="counter-icon">⭐</div>
+          <div class="counter-value" data-counter="rating" data-target="0" data-decimal="1">-</div>
+          <div class="counter-label">평균 별점</div>
+        </div>
+        <div class="counter-card">
+          <div class="counter-icon">❄️</div>
+          <div class="counter-value" data-counter="units" data-target="0" data-suffix="대">0</div>
+          <div class="counter-label">청소한 에어컨</div>
+        </div>
+        <div class="counter-cta">
+          작업 히스토리 / 리뷰 보기 <span class="arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">왜 티원클린인가요?</h2>
+      <p class="section-sub">고객과 사업자 모두를 위한 합리적 매칭 서비스</p>
+      <div class="grid">
+        <div class="card feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>빠른 매칭</h3>
+          <p>신청 즉시 주변 사업자에게 오더가 전달돼요.</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">💧</div>
+          <h3>전문 분해 세척</h3>
+          <p>곰팡이·먼지를 깨끗하게 제거해 냉방 효율을 높입니다.</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>검증된 사업자</h3>
+          <p>등록된 전문가들이 안전하게 작업합니다.</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">💸</div>
+          <h3>투명한 가격</h3>
+          <p>에어컨 종류별 정찰가, 추가 비용 걱정 없어요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:#fff;">
+    <div class="container">
+      <h2 class="section-title">이용 방법</h2>
+      <p class="section-sub">신청부터 완료까지 4단계</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h4>청소 신청</h4>
+          <p>에어컨 종류와 희망 일정을 입력해 주세요.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h4>사업자 매칭</h4>
+          <p>등록된 사업자가 오더를 수락합니다.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h4>방문 청소</h4>
+          <p>약속된 시간에 전문가가 방문해 분해 세척합니다.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h4>완료 확인</h4>
+          <p>작업 완료 후 결제, 후기를 남겨주세요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">청소 가격</h2>
+      <p class="section-sub">에어컨 1대 기준 정찰가 (VAT 포함)</p>
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th style="text-align:center;">예상 소요시간</th>
+            <th style="text-align:right;">가격 (1대 기준)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>벽걸이형</td><td style="text-align:center; color:var(--muted);">1시간</td><td>70,000원</td></tr>
+          <tr><td>스탠드형</td><td style="text-align:center; color:var(--muted);">1시간 30분</td><td>110,000원</td></tr>
+          <tr><td>천장형(시스템) 1 way</td><td style="text-align:center; color:var(--muted);">1시간 30분</td><td>80,000원</td></tr>
+          <tr><td>천장형(시스템) 4 way</td><td style="text-align:center; color:var(--muted);">1시간 30분</td><td>130,000원</td></tr>
+        </tbody>
+      </table>
+      <div style="text-align:center; margin-top:32px;">
+        <a href="order.html" class="btn btn-primary">지금 신청하기</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div>© 2026 티원클린(T-ONE CLEAN)</div>
+  </footer>
+
+  <script type="module" src="js/home.js"></script>
+</body>
+</html>

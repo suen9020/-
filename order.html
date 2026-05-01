@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>청소 신청 — 티원클린</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="티원클린 홈">
+        <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="logo-img">
+      </a>
+      <nav class="nav">
+        <a href="index.html">홈</a>
+        <a href="order.html" class="active">청소 신청</a>
+        <a href="my-orders.html">주문 조회</a>
+        <a href="history.html">작업 히스토리</a>
+        <a href="login.html">사업자 로그인</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="form-card">
+      <h2>에어컨 청소 신청</h2>
+      <p class="subtitle">정보를 입력해 주세요. 사업자가 오더를 수락하면 알려드릴게요.</p>
+
+      <form id="order-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">이름<span class="req">*</span></label>
+            <input type="text" id="name" name="name" required maxlength="20" placeholder="홍길동">
+          </div>
+          <div class="form-group">
+            <label for="phone">연락처<span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">방문 주소<span class="req">*</span></label>
+          <input type="text" id="address" name="address" required placeholder="도로명/지번 주소 + 상세 주소">
+        </div>
+
+        <div class="form-group">
+          <label>에어컨 종류<span class="req">*</span></label>
+          <div id="ac-type-options" class="ac-type-grid"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="brand">브랜드<span class="req">*</span></label>
+            <select id="brand" name="brand" required>
+              <option value="">선택해 주세요</option>
+              <option value="삼성">삼성</option>
+              <option value="LG">LG</option>
+              <option value="캐리어">캐리어</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="count">수량<span class="req">*</span></label>
+            <input type="number" id="count" name="count" min="1" max="20" value="1" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">희망 방문 날짜<span class="req">*</span></label>
+            <input type="date" id="date" name="date" required>
+          </div>
+          <div class="form-group">
+            <label>희망 시간대<span class="req">*</span></label>
+            <div class="chip-group" id="time-chips">
+              <input type="radio" name="time" id="t1" value="오전 (9-12시)" required>
+              <label for="t1">오전 (9-12시)</label>
+              <input type="radio" name="time" id="t2" value="오후 (13-17시)">
+              <label for="t2">오후 (13-17시)</label>
+              <input type="radio" name="time" id="t3" value="저녁 (17-20시)">
+              <label for="t3">저녁 (17-20시)</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">요청사항</label>
+          <textarea id="notes" name="notes" maxlength="300" placeholder="예: 친환경 세제 사용 부탁드려요 / 반려동물 있음 / 주차 가능"></textarea>
+        </div>
+
+        <div id="estimate-box" style="background:var(--primary-light); padding:14px 18px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:12px; flex-wrap:wrap;">
+          <div>
+            <span style="color:var(--primary-dark); font-weight:600;">예상 금액</span>
+            <span id="estimate-time" style="margin-left:10px; font-size:13px; color:var(--primary-dark); opacity:0.85;"></span>
+          </div>
+          <span id="estimate-value" style="font-size:20px; font-weight:800; color:var(--primary-dark);">0원</span>
+        </div>
+
+        <div class="form-actions">
+          <a href="index.html" class="btn btn-ghost">취소</a>
+          <button type="submit" class="btn btn-primary">신청 접수하기</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- 완료 모달 -->
+  <div class="modal-backdrop" id="success-modal">
+    <div class="modal">
+      <div class="modal-icon">✓</div>
+      <h3>신청이 접수되었어요!</h3>
+      <p>등록된 사업자에게 오더가 전달됩니다.</p>
+      <p>아래 주문번호는 진행 상황 조회에 필요해요.</p>
+      <div class="order-no" id="created-id">AC-000000-0000</div>
+      <div class="modal-actions">
+        <a href="my-orders.html" class="btn btn-outline">내 주문 조회</a>
+        <a href="index.html" class="btn btn-primary">홈으로</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div>© 2026 티원클린(T-ONE CLEAN)</div>
+  </footer>
+
+  <script type="module" src="js/order.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 — 티원클린</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="티원클린 홈">
+        <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="logo-img">
+      </a>
+      <nav class="nav">
+        <a href="index.html">홈</a>
+        <a href="order.html">청소 신청</a>
+        <a href="my-orders.html">주문 조회</a>
+        <a href="history.html">작업 히스토리</a>
+        <a href="login.html" class="active">사업자 로그인</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="form-card" style="max-width:440px;">
+      <h2>로그인</h2>
+      <p class="subtitle">사업자/관리자 계정으로 로그인하세요.</p>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="email">이메일<span class="req">*</span></label>
+          <input type="email" id="email" name="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="password">비밀번호<span class="req">*</span></label>
+          <input type="password" id="password" name="password" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="submit-btn">로그인</button>
+      </form>
+
+      <div style="margin-top:20px; text-align:center; font-size:14px; color:var(--muted);">
+        아직 계정이 없으신가요?
+        <a href="signup.html" style="color:var(--primary-dark); font-weight:600;">사업자 가입하기 →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div>© 2026 티원클린(T-ONE CLEAN)</div>
+  </footer>
+
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>
