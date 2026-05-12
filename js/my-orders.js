@@ -126,9 +126,9 @@ function render(orders, queriedPhone) {
     resultList.innerHTML = `
       <div class="empty">
         <div class="empty-icon">🔍</div>
-        <div><strong>${escapeHtml(queriedPhone)}</strong> 으로 접수된 주문이 없어요.</div>
+        <div><strong>${escapeHtml(queriedPhone)}</strong> 으로 접수된 예약이 없어요.</div>
         <div style="margin-top:8px; font-size:13px;">
-          <a href="order.html" style="color:var(--primary-dark); font-weight:600;">새로 신청하기 →</a>
+          <a href="order.html" style="color:var(--primary-dark); font-weight:600;">새로 예약하기 →</a>
         </div>
       </div>`;
     return;
@@ -228,7 +228,7 @@ function getStatusInfo(status) {
     case '완료':
       return { bg: '#d1fae5', color: '#065f46', message: '🎉 작업이 완료되었습니다. 이용해 주셔서 감사합니다!' };
     case '취소':
-      return { bg: '#fee2e2', color: '#991b1b', message: '❌ 취소된 주문입니다.' };
+      return { bg: '#fee2e2', color: '#991b1b', message: '❌ 취소된 예약입니다.' };
     default:
       return { bg: '#f1f5f9', color: '#475569', message: '' };
   }

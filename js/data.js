@@ -95,7 +95,7 @@ export async function acceptOrder(orderId, businessUser) {
   const ref = doc(db, 'orders', orderId);
   await runTransaction(db, async (tx) => {
     const snap = await tx.get(ref);
-    if (!snap.exists()) throw new Error('주문이 존재하지 않습니다.');
+    if (!snap.exists()) throw new Error('예약이 존재하지 않습니다.');
     const data = snap.data();
     if (data.status !== '대기') {
       throw new Error('이미 다른 사업자가 수락했거나 처리된 오더입니다.');

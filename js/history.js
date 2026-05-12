@@ -192,7 +192,7 @@ function renderStats() {
 }
 
 function render() {
-  // 보고서가 있는 주문 작업 (실데이터)
+  // 보고서가 있는 예약 작업 (실데이터)
   const orderItems = allCompleted
     .filter((o) => o.workReport && (getBeforePhotos(o.workReport).length || getAfterPhotos(o.workReport).length))
     .map((o) => ({ kind: 'order', data: o, ts: o.completedAt?.toMillis ? o.completedAt.toMillis() : 0 }));
@@ -228,7 +228,7 @@ function render() {
   } else {
     const emptyMsg = {
       all: '아직 등록된 작업이 없어요.',
-      orders: '아직 등록된 주문 작업 보고서가 없어요.',
+      orders: '아직 등록된 예약 작업 보고서가 없어요.',
       posts: '아직 작성된 게시물이 없어요.',
       reviewed: '아직 등록된 리뷰가 없어요.',
     }[currentTab];

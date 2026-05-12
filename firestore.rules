@@ -33,10 +33,10 @@ service cloud.firestore {
     }
 
     match /orders/{orderId} {
-      // 고객 주문 조회: 누구나 가능 (전화번호로 조회 기능 유지)
+      // 고객 예약 조회: 누구나 가능 (전화번호로 조회 기능 유지)
       allow read: if true;
 
-      // 고객 주문 신청: 비로그인도 가능, 단 status는 '대기'로만 생성
+      // 고객 예약 신청: 비로그인도 가능, 단 status는 '대기'로만 생성
       allow create: if request.resource.data.status == '대기'
         && request.resource.data.acceptedBy == null;
 

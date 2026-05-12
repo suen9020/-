@@ -3,10 +3,716 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>청소 신청 — MAIND (마인드)</title>
+  <title>서비스 예약하기 — MAIND (마인드)</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    body.order-page {
+      --maind-green: #1D9E75;
+      --maind-green-hover: #178660;
+      --maind-deep: #085041;
+      --maind-mint: #E1F5EE;
+      --maind-warm: #F1EFE8;
+      --maind-text: #0d3d34;
+      --maind-muted: #5a7a72;
+      --maind-line: #e6ece9;
+      --maind-danger: #e74c3c;
+      background: #f7faf8;
+      color: var(--maind-text);
+    }
+    .order-page .logo-mark {
+      background: var(--maind-green);
+      box-shadow: 0 6px 16px rgba(29, 158, 117, 0.32);
+    }
+    .order-page .logo-text-en { color: var(--maind-deep); }
+    .order-page .nav a:hover,
+    .order-page .nav a.active {
+      background: var(--maind-mint);
+      color: var(--maind-deep);
+    }
+    .order-page .btn-primary { background: var(--maind-green); }
+    .order-page .btn-primary:hover { background: var(--maind-green-hover); }
+    .order-page .btn-outline { color: var(--maind-deep); border-color: var(--maind-green); }
+    .order-page .btn-outline:hover { background: var(--maind-mint); }
+    .order-page .modal-icon { background: var(--maind-mint); color: var(--maind-green); }
+    .order-page .modal .order-no { background: var(--maind-mint); color: var(--maind-deep); }
+
+    .order-wrap { max-width: 760px; margin: 40px auto 60px; padding: 0 16px; }
+    .order-title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--maind-deep);
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+    }
+    .order-title-line {
+      width: 60px; height: 4px;
+      background: var(--maind-green);
+      border-radius: 2px;
+      margin: 12px auto 32px;
+    }
+    .order-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--maind-line);
+      box-shadow: 0 4px 16px rgba(8, 80, 65, 0.05);
+      padding: 26px;
+      margin-bottom: 18px;
+      transition: outline .15s;
+    }
+    .order-card.invalid-section {
+      outline: 2px solid var(--maind-danger);
+      outline-offset: -1px;
+    }
+    .order-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--maind-deep);
+      margin: 0 0 16px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+      line-height: 1.4;
+    }
+    .order-section-title .req { color: var(--maind-danger); }
+    .order-section-title .sub-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--maind-muted);
+    }
+
+    .of-row { display: grid; gap: 14px; }
+    .of-row.two { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 600px) { .of-row.two { grid-template-columns: 1fr; } }
+
+    .of-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--maind-text);
+      margin-bottom: 6px;
+    }
+    .of-label .req { color: var(--maind-danger); margin-left: 2px; }
+    .of-input, .of-select, .of-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--maind-line);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--maind-text);
+      background: #fff;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .of-input:focus, .of-select:focus, .of-textarea:focus {
+      outline: none;
+      border-color: var(--maind-green);
+      box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.15);
+    }
+    .of-textarea { resize: vertical; min-height: 80px; }
+    .of-input.invalid, .of-select.invalid, .of-textarea.invalid {
+      border-color: var(--maind-danger);
+      box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.12);
+    }
+    .of-input[readonly] { background: #fafbfa; }
+
+    /* Radio */
+    .of-radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .of-radio { flex: 1; min-width: 130px; }
+    .of-radio input { display: none; }
+    .of-radio label {
+      display: block;
+      padding: 14px 16px;
+      border: 1.5px solid var(--maind-line);
+      border-radius: 10px;
+      background: #fff;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--maind-muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .of-radio input:checked + label {
+      background: var(--maind-mint);
+      border-color: var(--maind-green);
+      color: var(--maind-deep);
+    }
+    .of-radio label small {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 3px;
+      opacity: 0.85;
+    }
+
+    /* 주소 */
+    .of-address-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .of-address-row .of-input { flex: 1; }
+    .btn-green {
+      background: var(--maind-green);
+      color: #fff;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .btn-green:hover { background: var(--maind-green-hover); }
+
+    /* 품목 카드 */
+    .item-empty {
+      padding: 18px;
+      text-align: center;
+      color: var(--maind-muted);
+      font-size: 13px;
+      background: #fbfdfc;
+      border: 1.5px dashed var(--maind-line);
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .item-card {
+      border: 1.5px solid var(--maind-line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: #fbfdfc;
+    }
+    .item-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .item-card-name { font-weight: 700; color: var(--maind-deep); font-size: 15px; }
+    .item-card-remove {
+      background: transparent;
+      border: none;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--maind-muted);
+      font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .item-card-remove:hover { background: #fee5e3; color: var(--maind-danger); }
+    .item-card-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .qty-control { display: flex; align-items: center; gap: 8px; }
+    .qty-btn {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      border: 1.5px solid var(--maind-line);
+      background: #fff;
+      color: var(--maind-deep);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .qty-btn:hover:not(:disabled) { border-color: var(--maind-green); background: var(--maind-mint); }
+    .qty-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .qty-value { min-width: 28px; text-align: center; font-weight: 700; }
+    .item-price { font-weight: 700; color: var(--maind-deep); }
+
+    .item-add-row { display: flex; gap: 8px; }
+    .item-add-row .of-select { flex: 1; }
+
+    /* 에어컨 종류 사진 보기 링크 */
+    .ac-guide-link {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 8px 4px;
+      background: transparent;
+      border: none;
+      color: #1D9E75;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: color .15s;
+    }
+    .ac-guide-link:hover { color: #085041; }
+
+    /* 에어컨 품목 안내 모달 */
+    .ac-guide-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 80, 65, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 16px;
+    }
+    .ac-guide-backdrop.show { display: flex; }
+    .ac-guide-dialog {
+      background: #fff;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(8, 80, 65, 0.25);
+    }
+    .ac-guide-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: #fff;
+      border-bottom: 1px solid #D3D1C7;
+      flex-shrink: 0;
+    }
+    .ac-guide-header h3 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      color: #085041;
+    }
+    .ac-guide-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: #5F5E5A;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background .15s, color .15s;
+    }
+    .ac-guide-close:hover { background: #E1F5EE; color: #085041; }
+    .ac-guide-body {
+      padding: 16px 20px 20px;
+      overflow-y: auto;
+      flex: 1;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ac-guide-card {
+      background: #FFFFFF;
+      border: 1px solid #E1F5EE;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      padding: 16px;
+      overflow: hidden;
+    }
+    .ac-guide-card:last-child { margin-bottom: 0; }
+    .ac-guide-card .ac-image-wrap {
+      background: #FFFFFF;
+      border: 2px solid #1D9E75;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-height: 220px;
+      min-height: 160px;
+      overflow: hidden;
+    }
+    .ac-guide-card .ac-image-wrap img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: 180px;
+      object-fit: contain;
+      display: block;
+    }
+    .ac-guide-card .ac-image-fallback {
+      width: 100%;
+      min-height: 156px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: #1D9E75;
+    }
+    .ac-guide-card .ac-info {
+      padding: 14px 4px 4px;
+      text-align: center;
+    }
+    .ac-guide-card .ac-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #085041;
+    }
+    @media (max-width: 600px) {
+      .ac-guide-dialog { max-height: 90vh; }
+      .ac-guide-header { padding: 14px 16px; }
+      .ac-guide-body { padding: 14px 16px 16px; }
+    }
+
+    /* 요약 섹션 */
+    .summary-card { background: linear-gradient(180deg, #fff 0%, var(--maind-mint) 100%); }
+    .summary-block-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--maind-deep);
+      margin-bottom: 10px;
+    }
+    .summary-items { display: flex; flex-direction: column; gap: 2px; }
+    .summary-item-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      padding: 7px 6px;
+      font-size: 14px;
+    }
+    .summary-item-left {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      min-width: 0;
+    }
+    .summary-bullet { color: var(--maind-deep); font-weight: 700; flex-shrink: 0; }
+    .summary-item-name { color: var(--maind-text); font-weight: 600; }
+    .summary-item-qty { color: var(--maind-muted); font-weight: 500; }
+    .summary-item-price { color: var(--maind-deep); font-weight: 700; white-space: nowrap; }
+    .summary-empty {
+      padding: 10px 6px;
+      color: var(--maind-muted);
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .summary-divider {
+      height: 1px;
+      background: rgba(8, 80, 65, 0.12);
+      margin: 14px 0;
+    }
+
+    .summary-info-rows { display: flex; flex-direction: column; gap: 6px; }
+    .summary-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 6px;
+      font-size: 14px;
+    }
+    .summary-info-label { color: var(--maind-muted); font-weight: 500; }
+    .summary-info-value { color: var(--maind-deep); font-weight: 600; }
+    .summary-info-value.extra-fee-value { color: #1D9E75; }
+
+    .summary-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 6px 0;
+    }
+    .summary-total-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--maind-deep);
+    }
+    .summary-total-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1D9E75;
+      letter-spacing: -0.01em;
+    }
+
+    /* 시간대 라벨 */
+    .time-slot-label-row {
+      margin-top: 18px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--maind-deep);
+    }
+    .time-slot-label-row .req { color: var(--maind-danger); }
+
+    /* 캘린더 — 섹션 전체 너비, 좌우 여백 제거 */
+    .cal-wrap {
+      background: transparent;
+      border: none;
+      padding: 0;
+      width: 100%;
+    }
+    .cal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 0 4px;
+    }
+    .cal-title {
+      font-weight: 700;
+      color: #1D9E75;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+    .cal-nav-btn {
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      width: 32px; height: 32px;
+      cursor: pointer;
+      color: #1D9E75;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1;
+      transition: background .15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cal-nav-btn:hover { background: #E1F5EE; }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      text-align: center;
+    }
+    .cal-dow {
+      font-size: 12px;
+      font-weight: 600;
+      color: #085041;
+      padding: 6px 0;
+    }
+    .cal-dow.sun { color: #FF4444; }
+    .cal-dow.sat { color: #1D9E75; }
+
+    .cal-day {
+      padding: 4px 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--maind-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cal-day .day-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      transition: background .15s, color .15s;
+    }
+    .cal-day:hover:not(:disabled) .day-num { background: #E1F5EE; }
+    .cal-day:disabled { cursor: not-allowed; }
+    .cal-day:disabled .day-num { color: #D3D1C7; }
+    .cal-day.sun:not(:disabled) .day-num { color: #FF4444; }
+    .cal-day.sat:not(:disabled) .day-num { color: #1D9E75; }
+    .cal-day.selected .day-num {
+      background: #1D9E75;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* 시간대 선택 */
+    .time-slots {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .time-slot {
+      flex: 1;
+      min-width: 0;
+      height: 48px;
+      padding: 0 12px;
+      border: 2px solid #D3D1C7;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: inherit;
+      color: var(--maind-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .time-slot:hover {
+      border-color: #1D9E75;
+      background: #E1F5EE;
+    }
+    .time-slot.selected {
+      border-color: #1D9E75;
+      background: #E1F5EE;
+      color: #085041;
+      font-weight: 600;
+    }
+    .time-slot-text {
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    /* 약관 */
+    /* 약관 영역: 1열 세로 강제, 가로 잘림 방지 */
+    .order-card[data-section="terms"] {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .order-card[data-section="terms"] > .terms-all,
+    .order-card[data-section="terms"] > .terms-item {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .terms-all {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: var(--maind-mint);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--maind-deep);
+    }
+    .terms-all input { accent-color: var(--maind-green); width: 18px; height: 18px; flex-shrink: 0; }
+    .terms-item {
+      border: 1px solid var(--maind-line);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #fff;
+      transition: border-color .15s;
+    }
+    .terms-item.invalid { border-color: var(--maind-danger); }
+    .terms-head {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+      gap: 10px;
+      height: 52px;
+      padding: 0 16px;
+      background: #fff;
+      border-radius: 8px;
+    }
+    .terms-item.open .terms-head {
+      border-radius: 8px 8px 0 0;
+    }
+    .terms-head input {
+      accent-color: var(--maind-green);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin: 0;
+    }
+    .terms-head-title {
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--maind-text);
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4;
+    }
+    .terms-head-title .req { color: var(--maind-danger); }
+    .terms-toggle {
+      background: #fff;
+      border: 1px solid #D3D1C7;
+      color: var(--maind-muted);
+      font-size: 12px;
+      cursor: pointer;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: inherit;
+      transition: all .15s;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .terms-toggle:hover {
+      color: var(--maind-deep);
+      border-color: var(--maind-green);
+      background: var(--maind-mint);
+    }
+    .terms-body {
+      display: none;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 16px 20px;
+      background: #F1EFE8;
+      border-radius: 0 0 8px 8px;
+      font-size: 13px;
+      line-height: 1.9;
+      color: #5F5E5A;
+      white-space: pre-line;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+    .terms-item.open .terms-body {
+      display: block;
+      animation: termsOpen .22s ease-out;
+    }
+    @keyframes termsOpen {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 480px) {
+      .terms-head { padding: 0 14px; gap: 8px; }
+      .terms-head-title { font-size: 13px; }
+      .terms-toggle { font-size: 11px; padding: 4px 10px; }
+      .terms-body { padding: 14px 16px; font-size: 12.5px; }
+    }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--maind-green);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s;
+      margin-top: 4px;
+      font-family: inherit;
+    }
+    .submit-btn:hover:not(:disabled) { background: var(--maind-green-hover); }
+    .submit-btn:disabled { opacity: 0.6; cursor: wait; }
+
+    @media (max-width: 600px) {
+      .order-wrap { margin: 20px auto 40px; }
+      .order-card { padding: 20px 18px; }
+      .order-title { font-size: 22px; }
+      .of-address-row { flex-direction: column; }
+      .item-add-row { flex-direction: column; }
+      .time-slot-text { font-size: 13px; }
+      .cal-day .day-num { width: 32px; height: 32px; }
+    }
+  </style>
 </head>
-<body>
+<body class="order-page">
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="logo" aria-label="MAIND 홈">
@@ -19,106 +725,232 @@
       <nav class="nav">
         <a href="index.html">홈</a>
         <a href="brand.html">브랜드 소개</a>
-        <a href="order.html" class="active">청소 신청</a>
-        <a href="my-orders.html">주문 조회</a>
+        <a href="order.html" class="active">예약하기</a>
+        <a href="my-orders.html">예약 조회</a>
         <a href="history.html">작업 히스토리</a>
         <a href="login.html">사업자 로그인</a>
       </nav>
     </div>
   </header>
 
-  <main class="container">
-    <div class="form-card">
-      <h2>에어컨 청소 신청</h2>
-      <p class="subtitle">정보를 입력해 주세요. 사업자가 오더를 수락하면 알려드릴게요.</p>
+  <main class="order-wrap">
+    <h1 class="order-title">서비스 예약하기</h1>
+    <div class="order-title-line"></div>
 
-      <form id="order-form" novalidate>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">이름<span class="req">*</span></label>
-            <input type="text" id="name" name="name" required maxlength="20" placeholder="홍길동">
-          </div>
-          <div class="form-group">
-            <label for="phone">연락처<span class="req">*</span></label>
-            <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="address">방문 주소<span class="req">*</span></label>
-          <input type="text" id="address" name="address" required placeholder="도로명/지번 주소 + 상세 주소">
-        </div>
-
-        <div class="form-group">
-          <label>에어컨 종류<span class="req">*</span></label>
-          <div id="ac-type-options" class="ac-type-grid"></div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="brand">브랜드<span class="req">*</span></label>
-            <select id="brand" name="brand" required>
-              <option value="">선택해 주세요</option>
-              <option value="삼성">삼성</option>
-              <option value="LG">LG</option>
-              <option value="캐리어">캐리어</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="count">수량<span class="req">*</span></label>
-            <input type="number" id="count" name="count" min="1" max="20" value="1" required>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="date">희망 방문 날짜<span class="req">*</span></label>
-            <input type="date" id="date" name="date" required>
-          </div>
-          <div class="form-group">
-            <label>희망 시간대<span class="req">*</span></label>
-            <div class="chip-group" id="time-chips">
-              <input type="radio" name="time" id="t1" value="오전 (9-12시)" required>
-              <label for="t1">오전 (9-12시)</label>
-              <input type="radio" name="time" id="t2" value="오후 (13-17시)">
-              <label for="t2">오후 (13-17시)</label>
-              <input type="radio" name="time" id="t3" value="저녁 (17-20시)">
-              <label for="t3">저녁 (17-20시)</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="notes">요청사항</label>
-          <textarea id="notes" name="notes" maxlength="300" placeholder="예: 친환경 세제 사용 부탁드려요 / 반려동물 있음 / 주차 가능"></textarea>
-        </div>
-
-        <div id="estimate-box" style="background:var(--primary-light); padding:14px 18px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:12px; flex-wrap:wrap;">
+    <form id="order-form" novalidate>
+      <!-- 1. 고객 정보 -->
+      <section class="order-card" data-section="customer">
+        <h2 class="order-section-title">고객 정보 <span class="req">*</span></h2>
+        <div class="of-row two">
           <div>
-            <span style="color:var(--primary-dark); font-weight:600;">예상 금액</span>
-            <span id="estimate-time" style="margin-left:10px; font-size:13px; color:var(--primary-dark); opacity:0.85;"></span>
+            <label class="of-label" for="customer-name">고객명 <span class="req">*</span></label>
+            <input type="text" class="of-input" id="customer-name" placeholder="홍길동" maxlength="20" autocomplete="name">
           </div>
-          <span id="estimate-value" style="font-size:20px; font-weight:800; color:var(--primary-dark);">0원</span>
+          <div>
+            <label class="of-label" for="customer-phone">휴대폰 번호 <span class="req">*</span></label>
+            <input type="tel" class="of-input" id="customer-phone" placeholder="010-0000-0000" maxlength="13" autocomplete="tel">
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 방문 주소 -->
+      <section class="order-card" data-section="address">
+        <h2 class="order-section-title">방문 주소 <span class="req">*</span></h2>
+        <div class="of-address-row">
+          <input type="text" class="of-input" id="address-main" placeholder="주소 검색 버튼을 눌러주세요" readonly>
+          <button type="button" class="btn-green" id="btn-address-search">주소 검색</button>
+        </div>
+        <input type="text" class="of-input" id="address-detail" placeholder="상세주소 (동, 호수 등)" maxlength="80">
+      </section>
+
+      <!-- 3. 에어컨 높이 3m 이상 -->
+      <section class="order-card" data-section="height">
+        <h2 class="order-section-title">에어컨 높이가 3m 이상인가요? <span class="req">*</span></h2>
+        <div class="of-radio-group">
+          <div class="of-radio">
+            <input type="radio" id="height-yes" name="high-ceiling" value="yes">
+            <label for="height-yes">네</label>
+          </div>
+          <div class="of-radio">
+            <input type="radio" id="height-no" name="high-ceiling" value="no">
+            <label for="height-no">아니요</label>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 케어 신청 품목 -->
+      <section class="order-card" data-section="items">
+        <h2 class="order-section-title">
+          케어 신청 품목 <span class="req">*</span>
+          <span class="sub-label">(에어컨 종류 선택 후 [+ 품목 추가] 클릭)</span>
+        </h2>
+        <div id="items-list"></div>
+        <div class="item-add-row">
+          <select class="of-select" id="item-type-select">
+            <option value="">에어컨 종류 선택</option>
+          </select>
+          <button type="button" class="btn-green" id="btn-add-item">+ 품목 추가</button>
+        </div>
+        <button type="button" class="ac-guide-link" id="btn-ac-guide">
+          🔍 내 에어컨 종류가 궁금하다면?
+        </button>
+      </section>
+
+      <!-- 5. 요청 날짜 및 시간 -->
+      <section class="order-card" data-section="datetime">
+        <h2 class="order-section-title">요청 날짜 및 시간 <span class="req">*</span></h2>
+        <div class="cal-wrap" id="calendar"></div>
+        <div class="time-slot-label-row">시간대 선택 <span class="req">*</span></div>
+        <div class="time-slots" id="time-slots">
+          <button type="button" class="time-slot" data-slot="오전">
+            <span class="time-slot-text">오전&nbsp;&nbsp;09:00 ~ 12:00</span>
+          </button>
+          <button type="button" class="time-slot" data-slot="오후">
+            <span class="time-slot-text">오후&nbsp;&nbsp;13:00 이후</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 6. 요청사항 -->
+      <section class="order-card" data-section="request">
+        <h2 class="order-section-title">요청사항 <span class="sub-label">(선택)</span></h2>
+        <select class="of-select" id="request-note">
+          <option value="">선택해 주세요</option>
+          <option value="방문 전 연락 바랍니다">방문 전 연락 바랍니다</option>
+          <option value="주차 가능">주차 가능</option>
+          <option value="주차 불가능">주차 불가능</option>
+          <option value="5년 이상 노후 제품입니다">5년 이상 노후 제품입니다</option>
+          <option value="__custom__">직접 입력</option>
+        </select>
+        <textarea class="of-textarea" id="request-custom" placeholder="요청사항을 입력해 주세요" maxlength="500" style="display:none; margin-top:10px;"></textarea>
+      </section>
+
+      <!-- 7. 총 신청 내역 및 금액 -->
+      <section class="order-card summary-card" data-section="summary">
+        <h2 class="order-section-title">총 신청 내역 및 금액</h2>
+
+        <div class="summary-block-label">신청 품목</div>
+        <div class="summary-items" id="summary-items"></div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-info-rows">
+          <div class="summary-info-row">
+            <span class="summary-info-label">요청 날짜</span>
+            <span class="summary-info-value" id="summary-date">날짜를 선택해 주세요</span>
+          </div>
+          <div class="summary-info-row">
+            <span class="summary-info-label">시간대</span>
+            <span class="summary-info-value" id="summary-time">시간대를 선택해 주세요</span>
+          </div>
+          <div class="summary-info-row" id="extra-fee-row" style="display:none;">
+            <span class="summary-info-label">3m 이상 추가</span>
+            <span class="summary-info-value extra-fee-value">+100,000원</span>
+          </div>
         </div>
 
-        <div class="form-actions">
-          <a href="index.html" class="btn btn-ghost">취소</a>
-          <button type="submit" class="btn btn-primary">신청 접수하기</button>
+        <div class="summary-divider"></div>
+
+        <div class="summary-total-row">
+          <span class="summary-total-label">최종 합계</span>
+          <span class="summary-total-value" id="total-amount">0원</span>
         </div>
-      </form>
-    </div>
+      </section>
+
+      <!-- 8. 약관 동의 -->
+      <section class="order-card" data-section="terms">
+        <h2 class="order-section-title">약관 동의 <span class="req">*</span></h2>
+        <label class="terms-all">
+          <input type="checkbox" id="terms-all">
+          <span>전체 동의</span>
+        </label>
+
+        <div class="terms-item" data-term="1">
+          <div class="terms-head">
+            <input type="checkbox" class="term-check" data-term="1" id="term-1">
+            <label for="term-1" class="terms-head-title">(필수) 예약 접수에 대한 안내사항 <span class="req">*</span></label>
+            <button type="button" class="terms-toggle">펼치기</button>
+          </div>
+          <div class="terms-body">(1) 예약은 신청 순서대로 처리되며, 수요가 집중되는 시간대(성수기 등)에
+    늦게 접수된 예약은 '대기 예약' 으로 등록될 수 있습니다.
+    대기 예약은 최종 확정 전까지 일정이 변경될 수 있는 점 양해 부탁드립니다.
+(2) 예약 접수 후 '확정 대기' 상태의 건은 영업일 기준 1~2일 내에
+    담당자가 확인 후 최종 확정됩니다.
+(3) 예약 접수와 동시에 결제가 진행되며, 최종 확정 전 취소 시
+    결제 금액은 전액 환불 처리됩니다.
+(4) 최종 확정 이후 취소 및 변경 문의는 고객센터 (0000-0000) 으로
+    연락 주시기 바랍니다.</div>
+        </div>
+
+        <div class="terms-item" data-term="2">
+          <div class="terms-head">
+            <input type="checkbox" class="term-check" data-term="2" id="term-2">
+            <label for="term-2" class="terms-head-title">(필수) 케어 서비스 안내사항 <span class="req">*</span></label>
+            <button type="button" class="terms-toggle">펼치기</button>
+          </div>
+          <div class="terms-body">(1) 세척 서비스는 분해 → 약품 도포 → 세척 → 건조 → 조립
+    순서로 진행됩니다.
+(2) 제품 노후화 정도에 따라 분해 및 조립 과정에서 의도치 않은
+    유격·이격이 발생하거나, 재가동 시 소음·오작동·에러 등의
+    현상이 나타날 수 있습니다.
+(3) 위와 같은 상황으로 제조사 A/S가 필요한 경우, 출장비 및
+    부품 교체비 등 발생하는 비용은 고객 부담임을 사전에 안내드립니다.
+(4) 마인드(MAIND)는 고객님의 제품 성능을 최대한 보존하면서
+    청결한 서비스를 제공하기 위해 최선을 다하겠습니다.</div>
+        </div>
+
+        <div class="terms-item" data-term="3">
+          <div class="terms-head">
+            <input type="checkbox" class="term-check" data-term="3" id="term-3">
+            <label for="term-3" class="terms-head-title">(필수) 예약 취소 및 환불에 관한 안내사항 <span class="req">*</span></label>
+            <button type="button" class="terms-toggle">펼치기</button>
+          </div>
+          <div class="terms-body">예약 취소는 홈페이지 [예약 조회] 메뉴에서 직접 처리하시거나,
+고객센터(전화·채팅)를 통해 요청하실 수 있습니다.
+
+취소 및 환불 규정
+(1) 서비스 당일 취소 또는 기사 방문 시 고객 부재·연락 두절로
+    서비스가 진행되지 못한 경우, 서비스 요금의 20%가
+    취소 수수료로 부과됩니다.
+    · 재방문 요청 시 1회에 한해 출장비 10,000원 부과
+    · 2회 이상 요청 시 신규 예약으로 처리됩니다
+(2) 아래 고객 사유로 서비스 진행이 불가한 경우,
+    출장비 10,000원이 부과됩니다.
+    · 예: 에어컨 임의 분해, 기기 고장, 소음,
+          설치 공간 협소 등 현장 작업 불가 상황
+(3) 마인드(MAIND)의 귀책 사유로 서비스가 제공되지 못한 경우,
+    전액 환불 처리됩니다.
+(4) 환불은 요청 접수일로부터 최대 2주 이내 완료됩니다.
+(5) 환불 방식은 결제 수단 기준으로 처리되며,
+    수단에 따라 일부 지연될 수 있습니다.</div>
+        </div>
+      </section>
+
+      <button type="submit" class="submit-btn" id="submit-btn">예약 접수하기</button>
+    </form>
   </main>
+
+  <!-- 에어컨 품목 안내 모달 -->
+  <div class="ac-guide-backdrop" id="ac-guide-modal" aria-hidden="true">
+    <div class="ac-guide-dialog" role="dialog" aria-labelledby="ac-guide-title">
+      <div class="ac-guide-header">
+        <h3 id="ac-guide-title">에어컨 품목 안내</h3>
+        <button type="button" class="ac-guide-close" id="ac-guide-close" aria-label="닫기">×</button>
+      </div>
+      <div class="ac-guide-body" id="ac-guide-body"></div>
+    </div>
+  </div>
 
   <!-- 완료 모달 -->
   <div class="modal-backdrop" id="success-modal">
     <div class="modal">
       <div class="modal-icon">✓</div>
-      <h3>신청이 접수되었어요!</h3>
+      <h3>예약이 접수되었습니다!</h3>
       <p>등록된 사업자에게 오더가 전달됩니다.</p>
-      <p>아래 주문번호는 진행 상황 조회에 필요해요.</p>
+      <p>아래 예약번호를 보관해 주세요.</p>
       <div class="order-no" id="created-id">AC-000000-0000</div>
       <div class="modal-actions">
-        <a href="my-orders.html" class="btn btn-outline">내 주문 조회</a>
+        <a href="my-orders.html" class="btn btn-outline">예약 내역 조회</a>
         <a href="index.html" class="btn btn-primary">홈으로</a>
       </div>
     </div>
@@ -128,6 +960,7 @@
     <div>© 2026 MAIND (마인드) — 깨끗해서 마음에 듭니다.</div>
   </footer>
 
+  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script type="module" src="js/order.js"></script>
 </body>
 </html>

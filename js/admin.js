@@ -196,7 +196,7 @@ function renderOrderTable() {
     }
     return `
       <tr>
-        <td data-label="주문번호"><span class="order-id">${escapeHtml(o.displayId || o.id)}</span></td>
+        <td data-label="예약번호"><span class="order-id">${escapeHtml(o.displayId || o.id)}</span></td>
         <td data-label="고객">${escapeHtml(o.customerName)}<br><span class="td-sub">${escapeHtml(o.phone)}</span></td>
         <td data-label="주소">${escapeHtml(o.address)}</td>
         <td data-label="품목">${escapeHtml(itemsText)}${brandText ? '<br>' + brandText : ''}<br><span class="td-sub">총 ${o.totalUnits || 0}대</span></td>

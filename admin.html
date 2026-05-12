@@ -6,7 +6,7 @@
   <title>관리자 페이지 — MAIND (마인드)</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="admin-page">
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="logo" aria-label="MAIND 홈">
@@ -89,11 +89,11 @@
 
     <!-- 전체 오더 -->
     <section class="tab-panel hidden" data-panel="orders">
-      <div class="card" style="padding:0; overflow-x:auto;">
+      <div class="card orders-scroll" style="padding:0; overflow-x:auto; -webkit-overflow-scrolling:touch;">
         <table class="data-table">
           <thead>
             <tr>
-              <th>주문번호</th>
+              <th>예약번호</th>
               <th>고객</th>
               <th>주소</th>
               <th>품목</th>

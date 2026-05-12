@@ -20,8 +20,8 @@
       <nav class="nav">
         <a href="index.html" class="active">홈</a>
         <a href="brand.html">브랜드 소개</a>
-        <a href="order.html">청소 신청</a>
-        <a href="my-orders.html">주문 조회</a>
+        <a href="order.html">예약하기</a>
+        <a href="my-orders.html">예약 조회</a>
         <a href="history.html">작업 히스토리</a>
         <a href="login.html">사업자 로그인</a>
       </nav>
@@ -34,7 +34,7 @@
       <h1>깨끗해서 <span class="accent">마음에 듭니다</span></h1>
       <p>MAIND — 검증된 전문가와 함께하는 에어컨 청소 매칭 플랫폼.<br>몇 번의 클릭으로 신청, 빠르게 매칭됩니다.</p>
       <div class="hero-cta">
-        <a href="order.html" class="btn btn-primary">청소 신청하기</a>
+        <a href="order.html" class="btn btn-primary">예약하기</a>
         <a href="brand.html" class="btn btn-outline">브랜드 소개</a>
       </div>
     </div>
@@ -109,7 +109,7 @@
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <h4>청소 신청</h4>
+          <h4>예약하기</h4>
           <p>에어컨 종류와 희망 일정을 입력해 주세요.</p>
         </div>
         <div class="step">
@@ -131,30 +131,97 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section pricing-section">
     <div class="container">
-      <h2 class="section-title">청소 가격</h2>
+      <h2 class="section-title">서비스 요금 안내</h2>
       <p class="section-sub">에어컨 1대 기준 정찰가 (VAT 포함)</p>
-      <table class="price-table">
-        <thead>
-          <tr>
-            <th>구분</th>
-            <th style="text-align:center;">예상 소요시간</th>
-            <th style="text-align:right;">가격 (1대 기준)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>벽걸이형</td><td style="text-align:center; color:var(--muted);">1시간</td><td>70,000원</td></tr>
-          <tr><td>스탠드형</td><td style="text-align:center; color:var(--muted);">1시간 30분</td><td>110,000원</td></tr>
-          <tr><td>천장형(시스템) 1 way</td><td style="text-align:center; color:var(--muted);">1시간 30분</td><td>80,000원</td></tr>
-          <tr><td>천장형(시스템) 4 way</td><td style="text-align:center; color:var(--muted);">1시간 30분</td><td>130,000원</td></tr>
-        </tbody>
-      </table>
-      <div style="text-align:center; margin-top:32px;">
-        <a href="order.html" class="btn btn-primary">지금 신청하기</a>
+      <div class="pricing-grid">
+        <div class="pricing-card"><div class="pc-name">벽걸이형</div><div class="pc-price">80,000원</div></div>
+        <div class="pricing-card"><div class="pc-name">스탠드형</div><div class="pc-price">120,000원</div></div>
+        <div class="pricing-card"><div class="pc-name">2IN1</div><div class="pc-price">170,000원</div></div>
+        <div class="pricing-card"><div class="pc-name">시스템에어컨<br>(천장형 1way)</div><div class="pc-price">80,000원</div></div>
+        <div class="pricing-card"><div class="pc-name">시스템에어컨<br>(천장형 2way)</div><div class="pc-price">100,000원</div></div>
+        <div class="pricing-card"><div class="pc-name">시스템에어컨<br>(천장형 4way)</div><div class="pc-price">140,000원</div></div>
+        <div class="pricing-card"><div class="pc-name">천장형 360</div><div class="pc-price">160,000원</div></div>
+        <div class="pricing-card"><div class="pc-name">업소형 스탠드 소형<br>(50평 이하)</div><div class="pc-price">160,000원</div></div>
+        <div class="pricing-card"><div class="pc-name">업소형 스탠드 대형<br>(50평 이상)</div><div class="pc-price">200,000원</div></div>
+      </div>
+      <div style="text-align:center; margin-top:36px;">
+        <a href="order.html" class="btn-pricing-cta">지금 예약하기</a>
       </div>
     </div>
   </section>
+
+  <style>
+    .pricing-section {
+      --pc-green: #1D9E75;
+      --pc-green-hover: #178660;
+      --pc-deep: #085041;
+      --pc-mint: #E1F5EE;
+      --pc-line: #e6ece9;
+      background: linear-gradient(180deg, #fff 0%, #f7faf8 100%);
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      background: #fff;
+      border: 1.5px solid var(--pc-line);
+      border-radius: 14px;
+      padding: 22px 18px;
+      text-align: center;
+      transition: transform .15s ease, border-color .15s, box-shadow .15s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-between;
+      min-height: 130px;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--pc-green);
+      box-shadow: 0 14px 28px rgba(29, 158, 117, 0.14);
+    }
+    .pricing-card .pc-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--pc-deep);
+      line-height: 1.45;
+    }
+    .pricing-card .pc-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--pc-green);
+      letter-spacing: -0.01em;
+    }
+    .btn-pricing-cta {
+      display: inline-block;
+      padding: 14px 36px;
+      background: var(--pc-green);
+      color: #fff;
+      font-weight: 700;
+      font-size: 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background .15s, transform .08s, box-shadow .15s;
+      box-shadow: 0 6px 16px rgba(29, 158, 117, 0.28);
+    }
+    .btn-pricing-cta:hover {
+      background: var(--pc-green-hover);
+      box-shadow: 0 10px 22px rgba(29, 158, 117, 0.34);
+    }
+    .btn-pricing-cta:active { transform: translateY(1px); }
+    @media (max-width: 600px) {
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .pricing-card { padding: 18px 12px; min-height: 110px; }
+      .pricing-card .pc-name { font-size: 13px; }
+      .pricing-card .pc-price { font-size: 16px; }
+    }
+  </style>
 
   <footer class="site-footer">
     <div>© 2026 MAIND (마인드) — 깨끗해서 마음에 듭니다.</div>
