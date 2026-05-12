@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>관리자 페이지 — 티원클린</title>
+  <title>관리자 페이지 — MAIND (마인드)</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <a href="index.html" class="logo" aria-label="티원클린 홈">
-        <img src="images/logo.webp" alt="티원클린 T-ONE CLEAN" class="logo-img">
+      <a href="index.html" class="logo" aria-label="MAIND 홈">
+        <span class="logo-mark">M</span>
+        <span class="logo-text">
+          <span class="logo-text-en">MAIND</span>
+          <span class="logo-text-ko">마인드</span>
+        </span>
       </a>
       <nav class="nav">
         <a href="admin.html" class="active">관리자</a>
@@ -60,6 +64,10 @@
 
     <!-- 사업자 관리 -->
     <section class="tab-panel" data-panel="businesses">
+      <div class="biz-sort-bar" style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-outline btn-sm biz-sort-btn" data-sort="createdAt">가입일 순</button>
+        <button type="button" class="btn btn-outline btn-sm biz-sort-btn" data-sort="businessName">업체명 순 (가나다)</button>
+      </div>
       <div class="card" style="padding:0; overflow-x:auto;">
         <table class="data-table">
           <thead>
@@ -194,7 +202,7 @@
   </div>
 
   <footer class="site-footer">
-    <div>© 2026 티원클린(T-ONE CLEAN)</div>
+    <div>© 2026 MAIND (마인드) — 깨끗해서 마음에 듭니다.</div>
   </footer>
 
   <script type="module" src="js/admin.js"></script>

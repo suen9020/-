@@ -250,7 +250,7 @@ function renderItem(item) {
 
 function renderOrderCard(o, asSample) {
   const itemsText = (o.items || []).map((it) => `${getAcLabel(it.type)} ${it.count}대`).join(', ');
-  const businessName = o.acceptedBy?.businessName || '티원클린 사업자';
+  const businessName = o.acceptedBy?.businessName || 'MAIND 사업자';
   const completedTxt = asSample
     ? o.completedAtDisplay
     : (o.completedAt ? formatDateTime(o.completedAt) : '-');

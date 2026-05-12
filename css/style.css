@@ -57,14 +57,47 @@ img { max-width: 100%; display: block; }
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 .logo-img {
   height: 46px;
   width: auto;
   display: block;
-  /* multiply 모드로 종이 배경 텍스처를 흰색 헤더와 자연스럽게 섞이도록 */
   mix-blend-mode: multiply;
+}
+/* MAIND 워드마크 로고 */
+.logo-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #38bdf8, var(--primary-dark));
+  color: #fff;
+  font-weight: 800;
+  font-size: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.04em;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.28);
+  flex-shrink: 0;
+}
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.logo-text-en {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  letter-spacing: 0.06em;
+}
+.logo-text-ko {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
 }
 .nav { display: flex; gap: 8px; align-items: center; }
 .nav a {
@@ -1113,6 +1146,279 @@ img { max-width: 100%; display: block; }
   .report-side-hint { margin-left: 0; width: 100%; }
 }
 
+/* ============ Brand Page (MAIND) ============ */
+.brand-hero {
+  position: relative;
+  padding: 100px 0 90px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.18), transparent 55%),
+    radial-gradient(circle at 80% 70%, rgba(125, 211, 252, 0.22), transparent 50%),
+    linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 100%);
+  overflow: hidden;
+  text-align: center;
+}
+.brand-hero .floaty {
+  position: absolute;
+  font-size: 32px;
+  opacity: 0.45;
+  animation: counter-float 4s ease-in-out infinite;
+}
+.brand-hero .floaty.f1 { top: 18%; left: 12%; animation-delay: 0s; }
+.brand-hero .floaty.f2 { top: 30%; right: 14%; animation-delay: 1.2s; font-size: 38px; }
+.brand-hero .floaty.f3 { bottom: 22%; left: 18%; animation-delay: 2s; font-size: 28px; }
+.brand-hero .floaty.f4 { bottom: 16%; right: 22%; animation-delay: 0.6s; }
+
+.brand-mark-big {
+  width: 110px;
+  height: 110px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #38bdf8, var(--primary-dark));
+  color: #fff;
+  font-weight: 800;
+  font-size: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+  box-shadow: 0 18px 38px rgba(2, 132, 199, 0.32);
+  position: relative;
+  z-index: 1;
+}
+.brand-name {
+  font-size: 60px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--primary-dark);
+  margin: 0 0 6px;
+  line-height: 1;
+}
+.brand-name-ko {
+  font-size: 18px;
+  color: var(--muted);
+  letter-spacing: 0.3em;
+  margin-bottom: 28px;
+}
+.brand-slogan {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 auto 14px;
+  max-width: 640px;
+  line-height: 1.4;
+}
+.brand-slogan-sub {
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* MAIND 알파벳 카드 */
+.maind-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-top: 8px;
+}
+.maind-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 18px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s;
+}
+.maind-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
+}
+.maind-letter {
+  display: inline-flex;
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary-light), #bae6fd);
+  color: var(--primary-dark);
+  font-size: 30px;
+  font-weight: 800;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  letter-spacing: -0.04em;
+}
+.maind-en {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+}
+.maind-ko {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.maind-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* 브랜드 스토리 섹션 */
+.story-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 48px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.story-text h3 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: var(--text);
+  line-height: 1.3;
+}
+.story-text p {
+  color: var(--text);
+  line-height: 1.8;
+  margin: 0 0 14px;
+  font-size: 16px;
+}
+.story-text .story-tag {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 5px 14px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.story-text .story-quote {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  line-height: 1.5;
+}
+.story-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(2, 132, 199, 0.12)),
+    repeating-linear-gradient(45deg, #e0f2fe 0 8px, #f0f9ff 8px 16px);
+  position: relative;
+  box-shadow: 0 12px 32px rgba(2, 132, 199, 0.12);
+}
+.story-image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.story-image .image-placeholder {
+  position: absolute; inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--primary-dark);
+  font-size: 14px;
+  font-weight: 600;
+}
+.story-image .image-placeholder .ph-icon { font-size: 56px; opacity: 0.5; }
+
+/* 슬로건 카드 */
+.slogan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.slogan-card {
+  background: linear-gradient(135deg, #fff, #f0f9ff);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.slogan-card::before {
+  content: '"';
+  position: absolute;
+  top: -10px; left: 12px;
+  font-size: 80px;
+  font-weight: 900;
+  color: var(--primary-light);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+.slogan-text {
+  position: relative;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  z-index: 1;
+}
+.slogan-card.featured {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  border-color: var(--primary-dark);
+  box-shadow: 0 12px 28px rgba(2, 132, 199, 0.25);
+}
+.slogan-card.featured::before { color: rgba(255,255,255,0.25); }
+.slogan-card.featured .slogan-text { color: #fff; }
+
+/* 확장 네이밍 라인업 */
+.naming-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.naming-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform .15s, border-color .15s;
+}
+.naming-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+.naming-num {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.1em;
+}
+.naming-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+}
+.naming-tag {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* 미디어 쿼리 추가는 아래 @media 블록에서 */
+
 /* ============ Footer ============ */
 .site-footer {
   background: #0f172a;
@@ -1161,4 +1467,92 @@ img { max-width: 100%; display: block; }
     white-space: nowrap;
   }
   .nav a { padding: 8px 12px; font-size: 13px; }
+  /* 긴 이메일 등 user-chip은 잘라서 표시 */
+  .user-chip {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
+
+  /* ===== Admin data-table → 모바일 카드형 ===== */
+  .data-table thead { display: none; }
+  .data-table,
+  .data-table tbody,
+  .data-table tfoot,
+  .data-table tr,
+  .data-table td {
+    display: block;
+    width: 100%;
+  }
+  .data-table tr {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .data-table tbody tr:hover { background: #fff; }
+  .data-table td {
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px dashed var(--border);
+    text-align: left !important;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .data-table tr td:last-child { border-bottom: none; }
+  .data-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .data-table td.td-empty::before { display: none; }
+  .data-table td.td-empty {
+    text-align: center !important;
+    border-bottom: none;
+    padding: 30px 10px;
+  }
+  .data-table tfoot tr {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+  }
+
+  /* ===== Brand 페이지 모바일 ===== */
+  .brand-hero { padding: 70px 0 60px; }
+  .brand-mark-big { width: 84px; height: 84px; font-size: 42px; border-radius: 22px; }
+  .brand-name { font-size: 44px; }
+  .brand-name-ko { font-size: 14px; margin-bottom: 22px; }
+  .brand-slogan { font-size: 20px; }
+  .brand-slogan-sub { font-size: 14px; }
+
+  .maind-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .maind-grid .maind-card:last-child {
+    grid-column: 1 / -1;
+  }
+  .maind-card { padding: 22px 14px; }
+  .maind-letter { width: 48px; height: 48px; font-size: 26px; }
+
+  .story-block {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 28px;
+  }
+  .story-text h3 { font-size: 22px; }
+  .story-text p { font-size: 15px; }
+  .story-image { aspect-ratio: 4 / 3; }
+
+  /* logo wordmark on mobile */
+  .logo-mark { width: 36px; height: 36px; font-size: 19px; border-radius: 9px; }
+  .logo-text-en { font-size: 16px; }
+  .logo-text-ko { font-size: 10px; }
 }

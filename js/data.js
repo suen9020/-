@@ -213,6 +213,10 @@ export async function setBusinessStatus(uid, status) {
   await updateDoc(doc(db, 'users', uid), { status });
 }
 
+export async function deleteBusinessUser(uid) {
+  await deleteDoc(doc(db, 'users', uid));
+}
+
 /* ---------- Work Posts (자유 게시물) ---------- */
 
 export async function createWorkPost(post) {

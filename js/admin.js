@@ -1,11 +1,12 @@
 import { requireAuth, logout } from './auth.js';
-import { subscribeOrders, subscribeBusinesses, setBusinessStatus, saveWorkReport, getBeforePhotos, getAfterPhotos } from './data.js';
+import { subscribeOrders, subscribeBusinesses, setBusinessStatus, deleteBusinessUser, saveWorkReport, getBeforePhotos, getAfterPhotos } from './data.js';
 import { formatPrice, formatDateTime, formatDate, escapeHtml, showToast, getAcLabel } from './utils.js';
 import { compressImage, openLightbox, MAX_PHOTOS_PER_SIDE } from './photo.js';
 
 let currentProfile = null;
 let allOrders = [];
 let allBusinesses = [];
+let businessSort = 'createdAt';
 
 (async function init() {
   currentProfile = await requireAuth('admin');
@@ -27,6 +28,7 @@ let allBusinesses = [];
   });
 
   initReportModal();
+  initBusinessSort();
   document.getElementById('order-table').addEventListener('click', onOrderRowClick);
 
   subscribeBusinesses((list) => {
@@ -66,16 +68,17 @@ function renderBusinesses() {
     tbody.innerHTML = `<tr><td colspan="8" class="td-empty">등록된 사업자가 없습니다.</td></tr>`;
     return;
   }
-  tbody.innerHTML = allBusinesses.map((b) => `
+  const list = getSortedBusinesses();
+  tbody.innerHTML = list.map((b) => `
     <tr>
-      <td><strong>${escapeHtml(b.businessName || '-')}</strong></td>
-      <td>${escapeHtml(b.ownerName || '-')}</td>
-      <td>${escapeHtml(formatBizRegNo(b.bizRegNo) || '-')}</td>
-      <td>${escapeHtml(b.email || '-')}</td>
-      <td>${escapeHtml(b.phone || '-')}</td>
-      <td>${b.createdAt ? formatDateTime(b.createdAt) : '-'}</td>
-      <td><span class="badge biz-${b.status}">${labelStatus(b.status)}</span></td>
-      <td style="text-align:right; white-space:nowrap;">${renderBizActions(b)}</td>
+      <td data-label="업체명"><strong>${escapeHtml(b.businessName || '-')}</strong></td>
+      <td data-label="대표자">${escapeHtml(b.ownerName || '-')}</td>
+      <td data-label="사업자번호">${escapeHtml(formatBizRegNo(b.bizRegNo) || '-')}</td>
+      <td data-label="이메일">${escapeHtml(b.email || '-')}</td>
+      <td data-label="연락처">${escapeHtml(b.phone || '-')}</td>
+      <td data-label="가입일">${b.createdAt ? formatDateTime(b.createdAt) : '-'}</td>
+      <td data-label="상태"><span class="badge biz-${b.status}">${labelStatus(b.status)}</span></td>
+      <td data-label="관리" style="text-align:right; white-space:nowrap;">${renderBizActions(b)}</td>
     </tr>
   `).join('');
 
@@ -94,27 +97,73 @@ function renderBusinesses() {
         } else if (act === 'reactivate') {
           await setBusinessStatus(uid, 'active');
           showToast('재활성화되었습니다.', 'success');
+        } else if (act === 'delete') {
+          if (!confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
+          await deleteBusinessUser(uid);
+          showToast('사업자가 삭제되었습니다.', 'success');
         }
       } catch (e) {
-        showToast('처리에 실패했습니다.', 'error');
+        console.error('[admin] biz action failed:', act, uid, e);
+        showToast(`처리 실패: ${e?.code || e?.message || '알 수 없는 오류'}`, 'error');
       }
     });
   });
 }
 
+function getSortedBusinesses() {
+  const list = [...allBusinesses];
+  if (businessSort === 'businessName') {
+    list.sort((a, b) => (a.businessName || '').localeCompare(b.businessName || '', 'ko'));
+  } else {
+    list.sort((a, b) => {
+      const ta = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+      const tb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+      return tb - ta;
+    });
+  }
+  return list;
+}
+
+function initBusinessSort() {
+  document.querySelectorAll('.biz-sort-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      businessSort = btn.dataset.sort;
+      updateBusinessSortStyles();
+      renderBusinesses();
+    });
+  });
+  updateBusinessSortStyles();
+}
+
+function updateBusinessSortStyles() {
+  document.querySelectorAll('.biz-sort-btn').forEach((btn) => {
+    if (btn.dataset.sort === businessSort) {
+      btn.style.background = '#1D9E75';
+      btn.style.color = '#fff';
+      btn.style.borderColor = '#1D9E75';
+    } else {
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }
+  });
+}
+
 function renderBizActions(b) {
+  const deleteBtn = `<button class="btn btn-sm" style="background:#FF4444; color:#fff; border-color:#FF4444;" data-act="delete" data-uid="${b.uid}">삭제</button>`;
   if (b.status === 'pending') {
     return `
       <button class="btn btn-primary btn-sm" data-act="approve" data-uid="${b.uid}">승인</button>
-      <button class="btn btn-danger btn-sm" data-act="reject" data-uid="${b.uid}">거절</button>`;
+      <button class="btn btn-danger btn-sm" data-act="reject" data-uid="${b.uid}">거절</button>
+      ${deleteBtn}`;
   }
   if (b.status === 'active') {
-    return `<button class="btn btn-danger btn-sm" data-act="reject" data-uid="${b.uid}">차단</button>`;
+    return `<button class="btn btn-danger btn-sm" data-act="reject" data-uid="${b.uid}">차단</button> ${deleteBtn}`;
   }
   if (b.status === 'rejected') {
-    return `<button class="btn btn-outline btn-sm" data-act="reactivate" data-uid="${b.uid}">재승인</button>`;
+    return `<button class="btn btn-outline btn-sm" data-act="reactivate" data-uid="${b.uid}">재승인</button> ${deleteBtn}`;
   }
-  return '';
+  return deleteBtn;
 }
 
 function labelStatus(s) {
@@ -147,17 +196,17 @@ function renderOrderTable() {
     }
     return `
       <tr>
-        <td><span class="order-id">${escapeHtml(o.displayId || o.id)}</span></td>
-        <td>${escapeHtml(o.customerName)}<br><span class="td-sub">${escapeHtml(o.phone)}</span></td>
-        <td>${escapeHtml(o.address)}</td>
-        <td>${escapeHtml(itemsText)}${brandText ? '<br>' + brandText : ''}<br><span class="td-sub">총 ${o.totalUnits || 0}대</span></td>
-        <td>${escapeHtml(o.preferredDate)}<br><span class="td-sub">${escapeHtml(o.preferredTime)}</span></td>
-        <td>${formatPrice(o.estimate)}</td>
-        <td>${formatPrice(o.commission)}</td>
-        <td>${o.acceptedBy ? escapeHtml(o.acceptedBy.businessName) : '-'}</td>
-        <td><span class="badge ${o.status}">${o.status}</span></td>
-        <td>${reportCell}</td>
-        <td><span class="td-sub">${formatDateTime(o.createdAt)}</span></td>
+        <td data-label="주문번호"><span class="order-id">${escapeHtml(o.displayId || o.id)}</span></td>
+        <td data-label="고객">${escapeHtml(o.customerName)}<br><span class="td-sub">${escapeHtml(o.phone)}</span></td>
+        <td data-label="주소">${escapeHtml(o.address)}</td>
+        <td data-label="품목">${escapeHtml(itemsText)}${brandText ? '<br>' + brandText : ''}<br><span class="td-sub">총 ${o.totalUnits || 0}대</span></td>
+        <td data-label="방문일">${escapeHtml(o.preferredDate)}<br><span class="td-sub">${escapeHtml(o.preferredTime)}</span></td>
+        <td data-label="금액">${formatPrice(o.estimate)}</td>
+        <td data-label="수수료">${formatPrice(o.commission)}</td>
+        <td data-label="담당 사업자">${o.acceptedBy ? escapeHtml(o.acceptedBy.businessName) : '-'}</td>
+        <td data-label="상태"><span class="badge ${o.status}">${o.status}</span></td>
+        <td data-label="보고서">${reportCell}</td>
+        <td data-label="접수일시"><span class="td-sub">${formatDateTime(o.createdAt)}</span></td>
       </tr>`;
   }).join('');
 }
@@ -187,13 +236,13 @@ function renderBusinessStats() {
 
   tbody.innerHTML = rows.map((r) => `
     <tr>
-      <td><strong>${escapeHtml(r.b.businessName || '-')}</strong><br><span class="td-sub">${escapeHtml(r.b.email || '')}</span></td>
-      <td>${r.accepted}</td>
-      <td>${r.inProgress}</td>
-      <td>${r.done}</td>
-      <td>${formatPrice(r.revenue)}</td>
-      <td><strong style="color:var(--primary-dark);">${formatPrice(r.commission)}</strong></td>
-      <td>${formatPrice(r.payout)}</td>
+      <td data-label="사업자"><strong>${escapeHtml(r.b.businessName || '-')}</strong><br><span class="td-sub">${escapeHtml(r.b.email || '')}</span></td>
+      <td data-label="수락">${r.accepted}</td>
+      <td data-label="진행중">${r.inProgress}</td>
+      <td data-label="완료">${r.done}</td>
+      <td data-label="총 매출">${formatPrice(r.revenue)}</td>
+      <td data-label="수수료"><strong style="color:var(--primary-dark);">${formatPrice(r.commission)}</strong></td>
+      <td data-label="정산액">${formatPrice(r.payout)}</td>
     </tr>
   `).join('');
 
@@ -207,13 +256,13 @@ function renderBusinessStats() {
   }), { accepted: 0, inProgress: 0, done: 0, revenue: 0, commission: 0, payout: 0 });
 
   tfoot.innerHTML = `
-    <td><strong>합계</strong></td>
-    <td><strong>${totals.accepted}</strong></td>
-    <td><strong>${totals.inProgress}</strong></td>
-    <td><strong>${totals.done}</strong></td>
-    <td><strong>${formatPrice(totals.revenue)}</strong></td>
-    <td><strong style="color:var(--primary-dark);">${formatPrice(totals.commission)}</strong></td>
-    <td><strong>${formatPrice(totals.payout)}</strong></td>
+    <td data-label="구분"><strong>합계</strong></td>
+    <td data-label="수락"><strong>${totals.accepted}</strong></td>
+    <td data-label="진행중"><strong>${totals.inProgress}</strong></td>
+    <td data-label="완료"><strong>${totals.done}</strong></td>
+    <td data-label="총 매출"><strong>${formatPrice(totals.revenue)}</strong></td>
+    <td data-label="수수료"><strong style="color:var(--primary-dark);">${formatPrice(totals.commission)}</strong></td>
+    <td data-label="정산액"><strong>${formatPrice(totals.payout)}</strong></td>
   `;
 }
 
